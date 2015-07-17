@@ -66,8 +66,8 @@ def get_resolvers():
 
     :param type: Only return resolvers of type (like passwdresolver..)
     :type type: basestring
-    :param editable: If only editable resolvers should be returned
-    :type type: basestring ("1")
+    :param editable: Set to "1" if only editable resolvers should be returned.
+    :type editable: basestring
     """
     typ = getParam(request.all_data, "type", optional)
     editable = getParam(request.all_data, "editable", optional)
@@ -104,35 +104,37 @@ def set_resolver(resolver=None):
     Additional parameters depend on the resolver type.
 
         LDAP:
-            LDAPURI
-            LDAPBASE
-            BINDDN
-            BINDPW
-            TIMEOUT
-            SIZELIMIT
-            LOGINNAMEATTRIBUTE
-            LDAPSEARCHFILTER
-            LDAPFILTER
-            USERINFO
-            NOREFERRALS        - True|False
+            * LDAPURI
+            * LDAPBASE
+            * BINDDN
+            * BINDPW
+            * TIMEOUT
+            * SIZELIMIT
+            * LOGINNAMEATTRIBUTE
+            * LDAPSEARCHFILTER
+            * LDAPFILTER
+            * USERINFO
+            * NOREFERRALS        - True|False
         SQL:
-            Database
-            Driver
-            Server
-            Port
-            User
-            Password
-            Table
-            Map
+            * Database
+            * Driver
+            * Server
+            * Port
+            * User
+            * Password
+            * Table
+            * Map
 
         Passwd
-            Filename
+            * Filename
     """
     param = request.all_data
     if resolver:
         # The resolver parameter was passed as a part of the URL
         param.update({"resolver": resolver})
     res = save_resolver(param)
+    g.audit_object.log({"success": res,
+                        "info": resolver})
     return send_result(res)
 
 
@@ -141,7 +143,7 @@ def set_resolver(resolver=None):
 @prepolicy(check_base_action, request, ACTION.RESOLVERDELETE)
 def delete_resolver_api(resolver=None):
     """
-    this function deletes an existing resolver
+    This function deletes an existing resolver.
     A resolver can not be deleted, if it is contained in a realm
 
     :param resolver: the name of the resolver to delete.
@@ -159,8 +161,6 @@ def delete_resolver_api(resolver=None):
 def get_resolver(resolver=None):
     """
     This function retrieves the definition of a single resolver.
-    If can be called via /system/getResolver?resolver=
-    or via /resolver/<resolver>
 
     :param resolver: the name of the resolver
     :return: a json result with the configuration of a specified resolver
@@ -176,9 +176,8 @@ def get_resolver(resolver=None):
 @resolver_blueprint.route('/test', methods=["POST"])
 def test_resolver():
     """
-
     :return: a json result with True, if the given values can create a
-    working resolver and a description.
+        working resolver and a description.
     """
     param = request.all_data
     rtype = getParam(param, "type", required)

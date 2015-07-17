@@ -5,7 +5,7 @@ import glob
 import sys
 
 #VERSION="2.1dev4"
-VERSION="2.5dev1"
+VERSION="2.5dev3"
 
 # Taken from kennethreitz/requests/setup.py
 package_directory = os.path.realpath(os.path.dirname(__file__))
@@ -63,7 +63,7 @@ setup(
                       "MarkupSafe==0.23",
                       "MySQL-python==1.2.5",
                       "Pillow==2.6.1",
-                      "PyJWT==0.4.3",
+                      "PyJWT==1.3.0",
                       "PyYAML==3.11",
                       "Pygments==2.0.2",
                       "SQLAlchemy==1.0.5",
@@ -94,7 +94,7 @@ setup(
     include_package_data=True,
     data_files=[('etc/privacyidea/',
                  ['deploy/apache/privacyideaapp.wsgi',
-                  'tests/testdata/dictionary',
+                  'deploy/privacyidea/dictionary',
                   'deploy/privacyidea/enckey',
                   'deploy/privacyidea/private.pem',
                   'deploy/privacyidea/public.pem']),
